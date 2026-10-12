@@ -489,7 +489,6 @@ function renderSearch(route) {
   const suggestionsHtml = renderSpellingSuggestions(query, suggestions);
   const lookupNoticeHtml = exactLookupMissing ? `<div class="lookup-notice"><strong>‘${escapeHtml(query)}’ 표제어는 현재 데이터에 없습니다.</strong><span>아래 항목이 있다면 철자 시작 일치 결과이며, 영어 정의 문장 검색은 <button type="button" data-switch-meaning>뜻 검색</button>에서 분리해 확인할 수 있습니다.</span></div>` : '';
   const kindOptions = ['all', 'prefix', 'suffix', 'root', 'combining-form'];
-  const examples = ['running', 'availability', 'in-', '쓰다', 'life'];
   const reviewedWordCount = state.data.words.filter((word) => word.status !== 'draft').length;
   const importedWordCount = state.data.words.length - reviewedWordCount;
   const lemmaCount = state.searchStats.lemmaCount;
@@ -497,21 +496,17 @@ function renderSearch(route) {
   app.innerHTML = `<div class="page search-page">
     <section class="dictionary-masthead">
       <p class="masthead-kicker">WORD ELEMENTS DICTIONARY</p>
-      <h1>영어 단어 구조 사전</h1>
+      <h1>영어 어원 사전</h1>
       <p>단어의 뜻에서 멈추지 않고 활용형, 파생어, 접사와 어근까지 연결해서 살펴보세요.</p>
       <form class="dictionary-search" id="search-form">
         <label class="sr-only" for="search-input">단어, 형태소 또는 뜻 검색</label>
         <input id="search-input" type="search" autocomplete="off" value="${escapeHtml(query)}" placeholder="영단어, 활용형, 형태소 또는 뜻을 입력하세요">
         <button type="submit">검색</button>
       </form>
-      <div class="quick-links" aria-label="검색 예시">
-        <span>추천 검색</span>
-        ${examples.map((example) => `<button type="button" data-query="${escapeHtml(example)}">${escapeHtml(example)}</button>`).join('')}
-      </div>
       <div class="sample-banner"><strong>확장 사전 데이터</strong><span>${lemmaCount.toLocaleString('ko-KR')}개 표제어 · ${state.data.words.length.toLocaleString('ko-KR')}개 품사별 항목 · ${state.data.elements.length}개 형태소 · 검수 ${reviewedWordCount.toLocaleString('ko-KR')}개 · 자동 수집 ${importedWordCount.toLocaleString('ko-KR')}개</span></div>
     </section>
 
-    <section class="search-results-panel" aria-label="검색 결과">
+    <section class="search-results-panel" aria-label="검색 결과" ${query ? '' : 'hidden'}>
       <div class="search-toolbar">
         <div class="mode-buttons" role="group" aria-label="검색 대상">
           ${[['all','통합'],['word','단어'],['element','형태소'],['meaning','뜻']].map(([value,label]) => `<button type="button" data-mode="${value}" aria-pressed="${mode === value}">${label}</button>`).join('')}
@@ -997,8 +992,8 @@ function renderRoute() {
 
 async function load() {
   try {
-    const catalogUrl = new URL('data/catalog.json?v=0.7.0', document.baseURI);
-    const importedUrl = new URL('data/imported-words.json?v=0.7.0', document.baseURI);
+    const catalogUrl = new URL('data/catalog.json?v=0.7.1', document.baseURI);
+    const importedUrl = new URL('data/imported-words.json?v=0.7.1', document.baseURI);
     const [catalogResponse, importedResponse] = await Promise.all([fetch(catalogUrl), fetch(importedUrl)]);
     if (!catalogResponse.ok) throw new Error(`catalog HTTP ${catalogResponse.status}`);
     if (!importedResponse.ok) throw new Error(`imported words HTTP ${importedResponse.status}`);
