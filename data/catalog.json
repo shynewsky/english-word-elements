@@ -3,7 +3,7 @@
     "project": "English Word Elements",
     "repository": "english-word-elements",
     "schemaVersion": 2,
-    "dataVersion": "0.7.0",
+    "dataVersion": "0.7.1",
     "language": "en",
     "interfaceLanguages": [
       "ko",
